@@ -3,10 +3,26 @@ import "./App.css";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 function App() {
   const [data, setData] = useState([]);
   const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
   const [filteredData, setFilteredData] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("");
 
   useEffect(() => {
     axios
@@ -35,6 +51,23 @@ function App() {
 
     // Update the filtered data
     setFilteredData(filtered);
+  };
+
+  // Filter data by selected month
+  const handleMonthChange = (event) => {
+    const month = event.target.value;
+    setSelectedMonth(month);
+
+    if (month === "") {
+      setFilteredData(data);
+    } else {
+      const monthIndex = months.indexOf(month);
+      const filtered = data.filter((item) => {
+        const saleDate = new Date(item.dateOfSale);
+        return saleDate.getMonth() === monthIndex;
+      });
+      setFilteredData(filtered);
+    }
   };
 
   // making a table using react-data-table
@@ -71,16 +104,35 @@ function App() {
       <h1 className="my-3">Transaction Dashboard</h1>
       <br />
       <div className="container">
+
+        <div className="">
         <div className="form-floating my-3 mx-3">
           <input
             type="text"
-            className="form-control form-control-sm input-sm border-secondary rounded w-25 input-sm"
+            className="form-control form-control border-secondary"
             placeholder="Search Products"
             value={searchQuery}
             onChange={handleSearch}
           />
           <label className="form-label">Search Products 🔍</label>
         </div>
+
+        <div className="">
+          <select
+            value={selectedMonth}
+            onChange={handleMonthChange}
+            className="p-2 my-3">
+
+            <option value="">All Months</option>
+            {months.map((month, index) => (
+              <option key={index} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
+        </div>
+        </div>
+
 
         <div className="container ">
           <DataTable
