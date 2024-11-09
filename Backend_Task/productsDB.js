@@ -13,7 +13,9 @@ const productSchema = new mongoose.Schema({
   dateOfSale: { type: Date, required: true },
 });
 
+     
+
 // this is the model
 
-const ProductModel = mongoose.model("ProductModel", productSchema);
+const ProductModel = mongoose.model("trans", productSchema);
 module.exports = ProductModel;

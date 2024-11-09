@@ -14,20 +14,20 @@ const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017/NewRCC')
 
 //fetching the json
-axios.get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')
-    .then(response =>{
-        const productData = response.data;
 
-        // now inserting that data into mongodb
+// axios.get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')
+//     .then(response =>{
+//         const productData = response.data;
 
-        ProductModel.insertMany(productData)
-        .then(()=>console.log("Data inserted"))
-        .catch((err=> console.error("Error inserting the data", err)))
+//         // now inserting that data into mongodb
 
-    .catch(error=>{
-        console.log(error('Error fetching data: ', error))
-    })
-})
+//         ProductModel.insertMany(productData)
+//         .then(()=>console.log("Data inserted"))
+//         .catch(err=> console.log(err))
+
+//     .catch(error=>{console.log(error)
+//     })
+// })
 
 
  
@@ -36,18 +36,18 @@ axios.get('https://s3.amazonaws.com/roxiler.com/product_transaction.json')
 
 
 
-
-
-
-
-
-
-
 // connecting backend with frontend
-app.get('/getData',(req,res)=>{
-    res.send("Server is ready")
-})
+// app.get('/sample',(req,res)=>{
+//     res.send("Server is ready")
+// })
 
+
+
+app.get('/transactions',(req,res)=>{
+    ProductModel.find()
+    .then(trans=>res.json(trans))
+    .catch(err=>res.json(err))
+})
 
 app.listen(PORT, ()=>{
     console.log(`Server started at port: ${PORT}`);
