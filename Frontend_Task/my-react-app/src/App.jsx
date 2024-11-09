@@ -5,16 +5,37 @@ import DataTable from "react-data-table-component";
 
 function App() {
   const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(""); // State to store the search query
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:8080/transactions")
       .then((response) => {
         setData(response.data);
+        setFilteredData(response.data); // Initially, set filtered data to all data
       })
-      //.then(response=>console.log(response.data))
       .catch((err) => console.log(err));
   }, []);
+
+  // searchig and filtering code here....
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Filter the data based on the search query
+    const filtered = data.filter((item) => {
+      // Check if the title, description, or ID contains the search query
+      return (
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.description.toLowerCase().includes(query.toLowerCase()) ||
+        item.id.toString().includes(query)
+      );
+    });
+
+    // Update the filtered data
+    setFilteredData(filtered);
+  };
 
   // making a table using react-data-table
 
@@ -45,38 +66,34 @@ function App() {
     },
   ];
 
-  // for filter searching
-
-  const [records, setRecords] = useState(data);
-
-  function handleFilter(event) {}
-
   return (
     <div className="container">
       <h1 className="my-3">Transaction Dashboard</h1>
       <br />
+      <div className="container">
+        <div className="form-floating my-3 mx-3">
+          <input
+            type="text"
+            className="form-control form-control-sm input-sm border-secondary rounded w-25 input-sm"
+            placeholder="Search Products"
+            value={searchQuery}
+            onChange={handleSearch}
+          />
+          <label className="form-label">Search Products 🔍</label>
+        </div>
 
-      <div className="form-floating my-3 mx-3 w-25">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search"
-          onChange={handleFilter}
-        />
-        <label className="form-label">Search</label>
-      </div>
-
- 
-      <div className="container rounded">
-        <DataTable
-          columns={columns}
-          selectableRows
-          fixedHeader
-          highlightOnHover
-          striped
-          data={data}
-          pagination
-        ></DataTable>
+        <div className="container ">
+          <DataTable
+            className="border-dark rounded"
+            columns={columns}
+            data={filteredData}
+            selectableRows
+            fixedHeader
+            highlightOnHover
+            striped
+            pagination
+          ></DataTable>
+        </div>
       </div>
     </div>
   );
