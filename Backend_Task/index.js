@@ -30,10 +30,6 @@ mongoose.connect('mongodb://localhost:27017/NewRCC')
 // })
 
 
- 
-
-
-
 
 
 // connecting backend with frontend
@@ -42,12 +38,19 @@ mongoose.connect('mongodb://localhost:27017/NewRCC')
 // })
 
 
-
+// API for listing all the transactions on to the webpage
 app.get('/transactions',(req,res)=>{
     ProductModel.find()
     .then(trans=>res.json(trans))
     .catch(err=>res.json(err))
 })
+
+//API for making a bar chart for the transactions
+
+
+
+
+
 
 app.listen(PORT, ()=>{
     console.log(`Server started at port: ${PORT}`);
