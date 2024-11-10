@@ -70,6 +70,37 @@ function App() {
     }
   };
 
+
+
+  //Statistics code.......
+  const [totalSales, setTotalSales] = useState(0);
+  const [totalSoldItems, setTotalSoldItems] = useState(0);
+  const [totalUnsoldItems, setTotalUnsoldItems] = useState(0);
+
+  const calculateTotals = (data) => {
+    let totalSales = 0;
+    let soldItems = 0;
+    let unsoldItems = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      totalSales += item.price;
+      soldItems += item.sold ? 1 : 0;
+      unsoldItems += !item.sold ? 1 : 0;
+    }
+
+    setTotalSales(totalSales);
+    setTotalSoldItems(soldItems);
+    setTotalUnsoldItems(unsoldItems);
+  };
+
+  useEffect(() => {
+    calculateTotals(filteredData);
+  }, [filteredData]);
+
+
+
+  
   // making a table using react-data-table
 
   const columns = [
@@ -104,37 +135,37 @@ function App() {
       <h1 className="my-3">Transaction Dashboard</h1>
       <br />
       <div className="container">
-
         <div className="">
-        <div className="form-floating my-3 mx-3">
-          <input
-            type="text"
-            className="form-control form-control border-secondary"
-            placeholder="Search Products"
-            value={searchQuery}
-            onChange={handleSearch}
-          />
-          <label className="form-label">Search Products 🔍</label>
-        </div>
+          <div className="form-floating my-3 mx-3">
+            <input
+              type="text"
+              className="form-control form-control border-secondary"
+              placeholder="Search Products"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
+            <label className="form-label">Search Products 🔍</label>
+          </div>
 
-        <div className="">
-          <select
-            value={selectedMonth}
-            onChange={handleMonthChange}
-            className="p-2 my-3">
-
-            <option value="">All Months</option>
-            {months.map((month, index) => (
-              <option key={index} value={month}>
-                {month}
-              </option>
-            ))}
-          </select>
+          <div className="">
+            <select
+              value={selectedMonth}
+              onChange={handleMonthChange}
+              className="p-2 my-3"
+            >
+              <option value="">All Months</option>
+              {months.map((month, index) => (
+                <option key={index} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        </div>
-
 
         <div className="container ">
+          <h2 className="my-3">Transactions Table</h2>
+
           <DataTable
             className="border-dark rounded"
             columns={columns}
@@ -145,6 +176,14 @@ function App() {
             striped
             pagination
           ></DataTable>
+        </div>
+
+        <div className="container border-dark my-4">
+          <h2 className="my-4">Transactions Statistics</h2>
+          {/* Display calculated totals */}
+          <p>Total Sales: &#8377; {totalSales.toFixed(2)}</p>
+          <p>Total Sold Items: {totalSoldItems}</p>
+          <p>Total Unsold Items: {totalUnsoldItems}</p>
         </div>
       </div>
     </div>
