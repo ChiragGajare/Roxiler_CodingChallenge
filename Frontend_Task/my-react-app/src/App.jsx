@@ -70,8 +70,6 @@ function App() {
     }
   };
 
-
-
   //Statistics code.......
   const [totalSales, setTotalSales] = useState(0);
   const [totalSoldItems, setTotalSoldItems] = useState(0);
@@ -98,9 +96,6 @@ function App() {
     calculateTotals(filteredData);
   }, [filteredData]);
 
-
-
-  
   // making a table using react-data-table
 
   const columns = [
@@ -181,9 +176,11 @@ function App() {
         <div className="container border-dark my-4">
           <h2 className="my-4">Transactions Statistics</h2>
           {/* Display calculated totals */}
-          <p>Total Sales: &#8377; {totalSales.toFixed(2)}</p>
-          <p>Total Sold Items: {totalSoldItems}</p>
-          <p>Total Unsold Items: {totalUnsoldItems}</p>
+          <div className="container border border-dark rounded w-25 p-2">
+          <p><strong>Total Amount of Sale:</strong> ₹ {totalSales.toFixed(2)} </p>
+          <p><strong>Total Sold Items:</strong> {totalSoldItems}</p>
+          <p><strong>Total Unsold Items:</strong> {totalUnsoldItems}</p>
+          </div>
         </div>
       </div>
     </div>
